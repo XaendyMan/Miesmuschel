@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Magische Miesmuschel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1f2937 0, #020617 45%, #000 100%);
+      color: #e5e7eb;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .app {
+      text-align: center;
+      padding: 2rem 1.5rem 2.5rem;
+      max-width: 420px;
+      width: 100%;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: #9ca3af;
+      margin-bottom: 1.5rem;
+    }
+
+    .shell-wrapper {
+      position: relative;
+      width: 260px;
+      height: 260px;
+      margin: 0 auto 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .shell-graphic {
+      width: 100%;
+      height: 100%;
+      display: block;
+      filter: drop-shadow(0 0 28px rgba(59, 130, 246, 0.5));
+    }
+
+    .shell-wrapper.flash {
+      transform: scale(1.03);
+      transition: transform 0.15s ease;
+    }
+
+    .shell-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      padding: 3.8rem 2.8rem 2.2rem;
+      box-sizing: border-box;
+    }
+
+    .shell-text-inner {
+      font-size: 0.95rem;
+      line-height: 1.35;
+      color: #e5e7eb;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+    }
+
+    .status {
+      font-size: 0.85rem;
+      color: #a5b4fc;
+      min-height: 1.2em;
+      margin-bottom: 0.75rem;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+      margin-bottom: 0.4rem;
+    }
+
+    button {
+      border-radius: 9999px;
+      border: none;
+      padding: 0.6rem 1.3rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      background: linear-gradient(to right, #4f46e5, #0ea5e9);
+      color: white;
+      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+      transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.2s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button.secondary {
+      background: rgba(15, 23, 42, 0.9);
+      color: #e5e7eb;
+      box-shadow: 0 5px 12px rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+    }
+
+    button:active {
+      transform: translateY(1px) scale(0.98);
+      box-shadow: 0 4px 8px rgba(15, 23, 42, 0.6);
+    }
+
+    .hint {
+      font-size: 0.75rem;
+      color: #6b7280;
+      margin-top: 0.3rem;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        scroll-behavior: auto !important;
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app" id="app">
+    <h1>Magische Miesmachermuschel</h1>
+    <p class="subtitle">Stell eine Frage, tippe einmal & schüttle dann dein Tablet.</p>
+
+    <!-- Zentrale Muschel mit Heiligenschein -->
+    <div class="shell-wrapper" id="shellWrapper">
+      <svg
+        viewBox="0 0 260 260"
+        class="shell-graphic"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <!-- Heiligenschein -->
+        <defs>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="4" result="coloredBlur" />
+            <feMerge>
+              <feMergeNode in="coloredBlur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+
+          <linearGradient id="shellGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#c7d2fe" />
+            <stop offset="45%" stop-color="#a5b4fc" />
+            <stop offset="100%" stop-color="#6366f1" />
+          </linearGradient>
+
+          <linearGradient id="innerGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#020617" />
+            <stop offset="100%" stop-color="#000000" />
+          </linearGradient>
+        </defs>
+
+        <ellipse
+          cx="130"
+          cy="34"
+          rx="74"
+          ry="16"
+          fill="none"
+          stroke="#facc15"
+          stroke-width="6"
+          opacity="0.95"
+          filter="url(#glow)"
+        />
+
+        <!-- Muschelkörper -->
+        <path
+          d="M40 150
+             C20 110, 30 60, 80 35
+             C115 18, 145 18, 180 35
+             C230 60, 240 110, 220 150
+             C200 195, 160 230, 130 235
+             C100 230, 60 195, 40 150Z"
+          fill="url(#shellGrad)"
+          stroke="#1f2937"
+          stroke-width="3"
+        />
+
+        <!-- Rillen -->
+        <path
+          d="M130 40 L130 220
+             M105 45 L115 215
+             M155 45 L145 215
+             M85 60 L105 205
+             M175 60 L155 205"
+          stroke="rgba(31,41,55,.45)"
+          stroke-width="2"
+          stroke-linecap="round"
+        />
+
+        <!-- Inneres dunkles Zentrum -->
+        <circle cx="130" cy="152" r="44" fill="url(#innerGrad)" />
+      </svg>
+
+      <!-- Text über der Muschel, aber nicht anklickbar -->
+      <div class="shell-text">
+        <div class="shell-text-inner" id="answerText">
+          Stelle deine Frage<br />und tippe auf die Muschel.
+        </div>
+      </div>
+    </div>
+
+    <div class="status" id="status"></div>
+
+    <div class="buttons">
+      <button id="playBtn">Antwort abspielen</button>
+      <button id="enableMotionBtn" class="secondary">Schütteln aktivieren</button>
+    </div>
+    <p class="hint">
+      Wichtig: Einmal auf "Antwort abspielen" tippen, bevor du schüttelst (Audio-Freigabe).
+    </p>
+
+    <!-- Zentrales Audio-Element -->
+    <audio id="player" preload="auto"></audio>
+  </div>
+
+  <script>
+    // 👉 HIER deine MP3-Dateien eintragen (liegen im selben Ordner wie diese HTML-Datei)
+    const answerFiles = [
+      "Hau_bloss_ab.mp3",
+      "Ja_gut_ne.mp3",
+      "Machste_nix.mp3",
+      "Machste_schon.mp3",
+      "MussMuss.mp3",
+      "Nicht_drin.mp3",
+      "Och_noe.mp3",
+      "Tja_gute_Frage.mp3"
+    ];
+
+    // Optional: passende Textausgaben
+    const answerTexts = [
+      "Hau bloß ab!",
+      "Ja gut ne..",
+      "Machste nix",
+      "Machste schon",
+      "Muss muss!",
+      "Steckste nicht drin",
+      "Och nöö!",
+      "Tja, gute Frage.."
+    ];
+
+    const answerTextEl = document.getElementById("answerText");
+    const statusEl = document.getElementById("status");
+    const enableMotionBtn = document.getElementById("enableMotionBtn");
+    const playBtn = document.getElementById("playBtn");
+    const shellWrapper = document.getElementById("shellWrapper");
+    const audioEl = document.getElementById("player");
+
+    let shakeEnabled = false;
+    let userHasTappedOnce = false;
+    let lastShakeTime = 0;
+
+    // Diese Werte kannst du später anpassen, falls es zu empfindlich / zu träge ist
+    const SHAKE_THRESHOLD = 18;      // Empfindlichkeit
+    const SHAKE_MIN_INTERVAL = 1000; // Mindestabstand in ms zwischen zwei Antworten
+
+    function pickRandomIndex() {
+      return Math.floor(Math.random() * answerFiles.length);
+    }
+
+    function flashShell() {
+      shellWrapper.classList.add("flash");
+      setTimeout(() => shellWrapper.classList.remove("flash"), 150);
+    }
+
+    function playRandomAnswer() {
+      // Merken, dass der Benutzer "echte" Interaktion hatte (wichtig für Mobile-Audio)
+      if (!userHasTappedOnce) {
+        userHasTappedOnce = true;
+      }
+
+      const idx = pickRandomIndex();
+      const file = answerFiles[idx];
+      const txt = answerTexts[idx] || "Die Muschel hat gesprochen.";
+
+      try {
+        audioEl.pause();
+        audioEl.currentTime = 0;
+      } catch (e) {}
+
+      audioEl.src = file;
+
+      audioEl.play()
+        .then(() => {
+          answerTextEl.textContent = txt;
+          flashShell();
+          statusEl.textContent = "";
+        })
+        .catch((err) => {
+          console.warn("Audio konnte nicht abgespielt werden:", err);
+          statusEl.textContent =
+            "Konnte Audio nicht abspielen. Prüfe: Lautstärke, Dateinamen, Browser (am besten Chrome).";
+        });
+    }
+
+    function handleMotion(event) {
+      if (!shakeEnabled || !userHasTappedOnce) return;
+
+      const acc = event.accelerationIncludingGravity;
+      if (!acc) return;
+
+      const x = acc.x || 0;
+      const y = acc.y || 0;
+      const z = acc.z || 0;
+      const magnitude = Math.sqrt(x * x + y * y + z * z);
+
+      const now = Date.now();
+      if (magnitude > SHAKE_THRESHOLD && now - lastShakeTime > SHAKE_MIN_INTERVAL) {
+        lastShakeTime = now;
+        playRandomAnswer();
+      }
+    }
+
+    function enableShake() {
+      try {
+        // Auf iOS gibt es requestPermission, auf Android normalerweise nicht – beides abgedeckt
+        if (
+          typeof DeviceMotionEvent !== "undefined" &&
+          typeof DeviceMotionEvent.requestPermission === "function"
+        ) {
+          DeviceMotionEvent.requestPermission()
+            .then((response) => {
+              if (response === "granted") {
+                window.addEventListener("devicemotion", handleMotion);
+                shakeEnabled = true;
+                statusEl.textContent = "Schütteln aktiviert. 📳";
+              } else {
+                statusEl.textContent =
+                  "Bewegungssensor abgelehnt. Du kannst immer den Button 'Antwort abspielen' nutzen.";
+              }
+            })
+            .catch((e) => {
+              console.warn(e);
+              statusEl.textContent =
+                "Fehler beim Aktivieren des Sensors. Nutze den Button 'Antwort abspielen'.";
+            });
+        } else if (typeof DeviceMotionEvent !== "undefined") {
+          // Typischer Android-Fall
+          window.addEventListener("devicemotion", handleMotion);
+          shakeEnabled = true;
+          statusEl.textContent = "Schütteln aktiviert. 📳";
+        } else {
+          statusEl.textContent =
+            "Dein Browser unterstützt keinen Bewegungssensor. Nutze den Button.";
+        }
+      } catch (e) {
+        console.warn(e);
+        statusEl.textContent =
+          "Konnte den Bewegungssensor nicht aktivieren. Nutze den Button.";
+      }
+    }
+
+    // Events
+    playBtn.addEventListener("click", playRandomAnswer);
+    enableMotionBtn.addEventListener("click", enableShake);
+    shellWrapper.addEventListener("click", playRandomAnswer);
+  </script>
+</body>
+</html>
